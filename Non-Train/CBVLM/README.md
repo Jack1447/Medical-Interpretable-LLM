@@ -1,0 +1,14 @@
+Current views on **CBVLM**: it is essentially a worthless paper.
+
+**What is CBVLM?** The method first retrieves *N* images from an image bank that are visually similar to the input image. These retrieved images, along with their five associated concept labels, are used as *demos*. The demos and the input image are then fed into an LLM to predict the five concepts.
+
+This framework, however, only contains two components: the **retrieval module** and the **LLM**. The only seemingly meaningful part is the retrieval module. Why? Because although the LLM is claimed to be a medical domain model, it is essentially incapable of handling such a specific classification task. Adding demos may slightly improve performance, but only when the demos are highly similar to the input image. (In fact, the paper itself admits that randomly selected demos perform on par with zero-shot results.) Importantly, the LLM is never trained for this task, and its poor performance is fully consistent with this reality.
+
+But is the retrieval module itself truly valuable? I would argue not. Consider an analogy: in elementary mathematics, you are given one worked-out example, followed by a few similar exercises. You might solve them correctly by imitation, but this does not mean you truly understand the underlying method—any deviation from the example will cause failure. The reason is that no real reasoning occurs. The same is true here.
+
+In fact, the retrieval module is in an even weaker position, since the task here is not reasoning but classification. This provides the LLM with an even greater “shortcut”: its only memory is the *short-term context window*, not long-term understanding. Thus, each prediction is made in isolation. If given a set of similar demos and their ground-truth labels, one can simply observe the frequency distribution of labels for each concept and output the most common choice. This is effectively what the LLM does within CBVLM.
+
+From another perspective, CBVLM merely aims at producing labels in a utilitarian way, while pretending that the results come from a “black-box model.” For clinicians, however, the demos themselves would be more valuable than the predicted labels, since they are at least verifiable and trustworthy examples.
+
+What we actually seek is **explainable prediction of medical concepts and diagnoses**. This is inherently a multi-class classification problem. An untrained LLM has no chance of solving it. Even with retrieval modules (like RAG) and fine-tuning (which is usually performed on text, not classification), the black-box nature cannot be concealed. Although multi-task solutions exist, pursuing them deviates from the original goal of *explainability*. Without carefully designing structures aligned with interpretability, shallow approaches such as CBVLM can only scratch the surface and will never achieve the true objective.
+

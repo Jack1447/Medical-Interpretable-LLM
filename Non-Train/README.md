@@ -1,0 +1,1 @@
+* [[2501.12266\] CBVLM: Training-free Explainable Concept-based Large Vision Language Models for Medical Image Classification](https://arxiv.org/abs/2501.12266)
